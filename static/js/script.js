@@ -17,6 +17,10 @@ $(function() {
     $('.overlay').fadeIn();
   });
 
+  $('.overlay').on('mousedown touchstart', function(e) {
+    e && e.stopPropagation();
+  });
+
   $('.new a').click(function(e) {
     e && e.preventDefault();
 
