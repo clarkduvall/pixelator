@@ -57,13 +57,17 @@ def canvas(name='main'):
         r.set(count_key(name), 0)
         count = 0
 
+    url = 'http://www.pixelator.co'
+    if name != 'main':
+        url = '%s/%s' % (url, name)
+
     ctx = {
         'name': name,
         'width': 80,
         'height': 55,
         'pixels': pixel_dict,
         'users': r.get(count_key(name)),
-        'url': quote('http://www.pixelator.co/%s' % name)
+        'url': quote(url)
     }
     return render_template('index.html', **ctx)
 
