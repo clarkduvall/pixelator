@@ -69,7 +69,7 @@ def canvas(name='main'):
         'width': 80,
         'height': 55,
         'pixels': json.dumps(pixel_dict),
-        'users': r.get(count_key(name)),
+        'users': count,
         'url': quote(url)
     }
     return render_template('index.html', **ctx)

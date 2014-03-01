@@ -19,6 +19,9 @@
     position: absolute;
     top: 158px;
     left: -194px; }
+    .panel h1 a {
+      color: inherit;
+      text-decoration: none; }
   .panel .by {
     -webkit-transform: rotate(-90deg);
     -moz-transform: rotate(-90deg);
