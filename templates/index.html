@@ -9,7 +9,6 @@
     <link type="text/css" rel="stylesheet" href="/s/css/style.css">
     <link type="text/css" rel="stylesheet" href="/s/css/jquery.simplecolorpicker.css">
     <link type="text/css" rel="stylesheet" href="/s/css/jquery.simplecolorpicker-regularfont.css">
-    <link type="text/css" rel="stylesheet" href="/s/css/normalize.min.css">
     <link type="text/css" rel="stylesheet" href="/s/css/rrssb.css">
   </head>
   <body>
@@ -31,13 +30,8 @@
     </div>
 
     <div class="drawing">
-      <div class="canvas" style="width: {{ 10 * width }}px">
-      {% for y in range(height) %}
-        <div>
-          {% for x in range(width) %}<div class="pixel-wrapper"><div class="pixel" data-x="{{ x }}" data-y="{{ y }}" {% if pixels[x].get(y) %}style="background: {{ pixels[x][y] }}"{% endif %}></div></div>{% endfor %}
-        </div>
-      {% endfor %}
-      </div>
+      <canvas class="canvas">
+      </canvas>
       <select class="colorpicker">
         <option value="#000000">#000000</option>
         <option value="#ffffff">#ffffff</option>
@@ -91,6 +85,7 @@
       WIDTH = {{ width }};
       HEIGHT = {{ height }};
       USERS = {{ users }};
+      PIXELS = '{{ pixels|safe }}';
     </script>
     <script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="/s/js/reconnecting-websocket.min.js"></script>

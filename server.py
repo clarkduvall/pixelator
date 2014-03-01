@@ -50,7 +50,10 @@ def canvas(name='main'):
     pixel_dict = defaultdict(lambda: defaultdict(dict))
     for coords, color in pixels.iteritems():
         x, y = coords.split(',')
-        pixel_dict[int(x)][int(y)] = color
+        try:
+            pixel_dict[int(x)][int(y)] = color
+        except (ValueError, TypeError):
+            pass
 
     count = r.get(count_key(name))
     if count is None:
@@ -65,7 +68,7 @@ def canvas(name='main'):
         'name': name,
         'width': 80,
         'height': 55,
-        'pixels': pixel_dict,
+        'pixels': json.dumps(pixel_dict),
         'users': r.get(count_key(name)),
         'url': quote(url)
     }

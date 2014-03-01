@@ -17,7 +17,7 @@
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
     position: absolute;
-    top: 91px;
+    top: 158px;
     left: -194px; }
   .panel .by {
     -webkit-transform: rotate(-90deg);
@@ -56,6 +56,7 @@
   left: 100px;
   top: 0; }
   .drawing .canvas {
+    display: block;
     line-height: 0;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -71,13 +72,6 @@
     .drawing .help a {
       text-decoration: none;
       color: inherit; }
-  .drawing .pixel-wrapper {
-    display: inline-block;
-    padding: 5px;
-    margin: -5px; }
-    .drawing .pixel-wrapper .pixel {
-      width: 10px;
-      height: 10px; }
 
 .overlay {
   position: absolute;

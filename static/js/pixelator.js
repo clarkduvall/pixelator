@@ -1,17 +1,39 @@
-$.fn.pixelator = function(sendSocket, receiveSocket, sendInterval, defaultCol) {
-  var $pixelWrappers = this.find('.pixel-wrapper'),
-      drawing = false,
+$.fn.pixelator = function(sendSocket, receiveSocket, sendInterval) {
+  var drawing = false,
       toSend = [],
       id = Math.floor(Math.random() * 1000000),
-      color = defaultCol;
+      $canvas = this,
+      canvas = $canvas[0],
+      ctx = canvas.getContext('2d'),
+      pixels = JSON.parse(PIXELS),
+      color = 'black',
+      pixelSize = 10;
+
+  ctx.width = canvas.width = WIDTH * pixelSize;
+  ctx.height = canvas.height = HEIGHT * pixelSize;
 
   this.setColor = function(newColor) {
     color = newColor;
   };
 
   function colorPixel(x, y, color) {
-    $('[data-x=' + x + '][data-y=' + y + ']').css('background', color);
+    ctx.fillStyle = color;
+    ctx.fillRect(x * 10, y * 10, 10, 10);
   }
+
+  function mapX(x) {
+    return Math.floor((x - $canvas.offset().left) / pixelSize);
+  }
+
+  function mapY(y) {
+    return Math.floor((y - $canvas.offset().top) / pixelSize);
+  }
+
+  $.each(pixels, function(x, yRow) {
+    $.each(yRow, function(y, col) {
+      colorPixel(x, y, col);
+    });
+  });
 
   function defer(list, timeout) {
     if (!list.length) return;
@@ -35,13 +57,15 @@ $.fn.pixelator = function(sendSocket, receiveSocket, sendInterval, defaultCol) {
     drawing = false;
   });
 
-  $pixelWrappers.bind('mousemove touchmove', function(e) {
+  $canvas.bind('mousemove touchmove', function(e) {
     if (!drawing) return;
     e && e.preventDefault();
 
-    var $div = $(this).find('.pixel'),
-        x = $div.data('x'),
-        y = $div.data('y');
+    if (e.originalEvent.targetTouches)
+      e = e.originalEvent.targetTouches[0];
+
+    var x = mapX(e.pageX),
+        y = mapY(e.pageY);
     colorPixel(x, y, color);
     toSend.push({x: x, y: y, color: color});
   });
