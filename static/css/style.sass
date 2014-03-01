@@ -1,2 +1,126 @@
-body
+@import url(//fonts.googleapis.com/css?family=Montserrat:400,700)
+
+@mixin rotate($deg)
+  -webkit-transform: rotate($deg)
+  -moz-transform: rotate($deg)
+  -o-transform: rotate($deg)
+  -ms-transform: rotate($deg)
+  transform: rotate($deg)
+
+*
   margin: 0
+  padding: 0
+  font-family: "Montserrat"
+
+// Panel
+
+.panel
+  width: 100px
+  height: 510px
+  position: relative
+
+  h1
+    font-size: 100px
+    display: inline-block
+    +rotate(90deg)
+    position: absolute
+    top: 91px
+    left: -194px
+
+  .by
+    +rotate(-90deg)
+    position: absolute
+    white-space: nowrap
+    top: 368px
+    left: 21px
+    color: #ccc
+
+    a
+      color: #bbb
+
+  .extra
+    position: absolute
+    top: 450px
+
+  .description
+    color: #aaa
+    font-size: 18px
+    margin: 14px 0
+
+  .new
+    color: #aaa
+    font-size: 14px
+    margin-top: 30px
+
+    a
+      color: inherit
+      text-decoration: none
+
+      .plus
+        font-size: 50px
+        line-height: 20px
+        vertical-align: bottom
+
+
+// Drawing area
+
+.drawing
+  position: absolute
+  left: 100px
+  top: 0
+
+  .canvas
+    line-height: 0
+    -webkit-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    user-select: none
+    cursor: crosshair
+    border: 1px dashed #ccc
+    border-top: none
+
+  .muted
+    color: #ccc
+
+  .help
+    float: right
+
+    a
+      text-decoration: none
+      color: inherit
+
+  .pixel-wrapper
+    display: inline-block
+    padding: 5px
+    margin: -5px
+
+    .pixel
+      width: 10px
+      height: 10px
+
+// Popup
+
+.overlay
+  position: absolute
+  top: 0
+  left: 0
+  background: rgba(0, 0, 0, .5)
+  width: 100%
+  height: 100%
+  z-index: 2
+
+  .popup
+    color: #333
+    text-align: center
+    background: rgba(255, 255, 255, .9)
+    margin: 20px auto 0 auto
+    width: 500px
+    padding: 20px
+    border: 10px solid white
+
+    p
+      margin: 20px 0 0 0
+
+    a
+      color: #f83a22
+      text-decoration: none

@@ -1,2 +1,102 @@
-body {
-  margin: 0; }
+@import url(//fonts.googleapis.com/css?family=Montserrat:400,700);
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat"; }
+
+.panel {
+  width: 100px;
+  height: 510px;
+  position: relative; }
+  .panel h1 {
+    font-size: 100px;
+    display: inline-block;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+    position: absolute;
+    top: 91px;
+    left: -194px; }
+  .panel .by {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    position: absolute;
+    white-space: nowrap;
+    top: 368px;
+    left: 21px;
+    color: #cccccc; }
+    .panel .by a {
+      color: #bbbbbb; }
+  .panel .extra {
+    position: absolute;
+    top: 450px; }
+  .panel .description {
+    color: #aaaaaa;
+    font-size: 18px;
+    margin: 14px 0; }
+  .panel .new {
+    color: #aaaaaa;
+    font-size: 14px;
+    margin-top: 30px; }
+    .panel .new a {
+      color: inherit;
+      text-decoration: none; }
+      .panel .new a .plus {
+        font-size: 50px;
+        line-height: 20px;
+        vertical-align: bottom; }
+
+.drawing {
+  position: absolute;
+  left: 100px;
+  top: 0; }
+  .drawing .canvas {
+    line-height: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: crosshair;
+    border: 1px dashed #cccccc;
+    border-top: none; }
+  .drawing .muted {
+    color: #cccccc; }
+  .drawing .help {
+    float: right; }
+    .drawing .help a {
+      text-decoration: none;
+      color: inherit; }
+  .drawing .pixel-wrapper {
+    display: inline-block;
+    padding: 5px;
+    margin: -5px; }
+    .drawing .pixel-wrapper .pixel {
+      width: 10px;
+      height: 10px; }
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  z-index: 2; }
+  .overlay .popup {
+    color: #333333;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    margin: 20px auto 0 auto;
+    width: 500px;
+    padding: 20px;
+    border: 10px solid white; }
+    .overlay .popup p {
+      margin: 20px 0 0 0; }
+    .overlay .popup a {
+      color: #f83a22;
+      text-decoration: none; }

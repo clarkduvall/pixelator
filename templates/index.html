@@ -6,9 +6,96 @@
     <meta name="description" content="Socket drawing">
     <meta property="og:image" content="http://domain.com/s/image.png">
     <link type="text/css" rel="stylesheet" href="/s/css/style.css">
+    <link type="text/css" rel="stylesheet" href="/s/css/jquery.simplecolorpicker.css">
+    <link type="text/css" rel="stylesheet" href="/s/css/jquery.simplecolorpicker-regularfont.css">
+    <link type="text/css" rel="stylesheet" href="/s/css/normalize.min.css">
+    <link type="text/css" rel="stylesheet" href="/s/css/rrssb.css">
   </head>
   <body>
+
+    <div class="panel">
+      <h1>Pixelator</h1>
+      <span class="by">by <a href="http://clarkduvall.com" target="_blank">Clark DuVall</a></span>
+      <div class="extra">
+        <div class="social">
+          {% include 'social.html' %}
+        </div>
+        <div class="new">
+          <a href="#">
+            <span class="plus">+</span><br>
+            new canvas
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawing">
+      <div class="canvas" style="width: {{ 10 * width }}px">
+      {% for y in range(height) %}
+        <div>
+          {% for x in range(width) %}<div class="pixel-wrapper"><div class="pixel" data-x="{{ x }}" data-y="{{ y }}" {% if pixels[x].get(y) %}style="background: {{ pixels[x][y] }}"{% endif %}></div></div>{% endfor %}
+        </div>
+      {% endfor %}
+      </div>
+      <select class="colorpicker">
+        <option value="#000000">#000000</option>
+        <option value="#ffffff">#ffffff</option>
+        <option value="#d06b64">#d06b64</option>
+        <option value="#f83a22">#f83a22</option>
+        <option value="#fa573c">#fa573c</option>
+        <option value="#ff7537">#ff7537</option>
+        <option value="#ffad46">#ffad46</option>
+        <option value="#42d692">#42d692</option>
+        <option value="#16a765">#16a765</option>
+        <option value="#7bd148">#7bd148</option>
+        <option value="#b3dc6c">#b3dc6c</option>
+        <option value="#fbe983">#fbe983</option>
+        <option value="#fad165">#fad165</option>
+        <option value="#92e1c0">#92e1c0</option>
+        <option value="#9fe1e7">#9fe1e7</option>
+        <option value="#9fc6e7">#9fc6e7</option>
+        <option value="#4986e7">#4986e7</option>
+        <option value="#9a9cff">#9a9cff</option>
+        <option value="#b99aff">#b99aff</option>
+        <option value="#c2c2c2">#c2c2c2</option>
+        <option value="#cabdbf">#cabdbf</option>
+        <option value="#cca6ac">#cca6ac</option>
+        <option value="#f691b2">#f691b2</option>
+        <option value="#cd74e6">#cd74e6</option>
+      </select>
+      <span class="muted">choose color</span>
+      <span class="help"><a href="#">?</a></span>
+    </div>
+
+    <div class="overlay">
+      <div class="popup">
+        <h2>Welcome to Pixelator</h2>
+        <p>
+          Everyone at this URL is drawing on the same canvas
+        </p>
+        <p>
+          Want your own? Click the "new canvas" button (bottom left)
+        </p>
+        <p>
+          Share this URL with your friends to draw with them
+        </p>
+        <p>
+        <a href="#" class="close">Close</a>
+        </p>
+      </div>
+    </div>
+
+    <script>
+      NAME = '{{ name }}';
+      WIDTH = {{ width }};
+      HEIGHT = {{ height }};
+      USERS = {{ users }};
+    </script>
     <script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="/s/js/reconnecting-websocket.min.js"></script>
+    <script type="text/javascript" src="/s/js/pixelator.js"></script>
+    <script type="text/javascript" src="/s/js/jquery.simplecolorpicker.js"></script>
     <script type="text/javascript" src="/s/js/script.js"></script>
+    <script type="text/javascript" src="/s/js/rrssb.min.js"></script>
   </body>
 </html>

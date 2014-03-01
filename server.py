@@ -1,22 +1,94 @@
+from collections import defaultdict
+from functools import wraps
+import json
+import os
+from urllib import quote
+
 from flask import Flask
 from flask import render_template
-from flask_sockets import Sockets
+import gevent
+import redis
+
+from canvas_backend import CanvasBackend
+from flask_sockets2 import Sockets
+
+
+REDIS_URL = os.environ['REDISCLOUD_URL']
 
 app = Flask(__name__, static_url_path='/s', static_folder='static')
-app.debug = True
+app.debug = 'DEBUG' in os.environ
 sockets = Sockets(app)
+r = redis.from_url(REDIS_URL)
+canvases = {}
 
-import logging
-logging.error('INITIALIZ')
+def get_or_create_canvas(name):
+    if name not in canvases:
+        canvases[name] = CanvasBackend(name, r)
+    return canvases[name]
 
-@sockets.route('/echo')
-def echo_socket(ws):
-    while not ws.closed:
-        message = ws.receive()
-        if not ws.closed:
-            ws.send(message)
+
+def count_key(name):
+    return name + '/count'
+
+
+def keep_count(f):
+    @wraps(f)
+    def inner(ws, name, *args, **kwargs):
+        key = count_key(name)
+        r.incr(key)
+        try:
+            return f(ws, name, *args, **kwargs)
+        finally:
+            r.decr(key)
+    return inner
 
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+@app.route('/<name>')
+def canvas(name='main'):
+    pixels = r.hgetall(name)
+    pixel_dict = defaultdict(lambda: defaultdict(dict))
+    for coords, color in pixels.iteritems():
+        x, y = coords.split(',')
+        pixel_dict[int(x)][int(y)] = color
+
+    count = r.get(count_key(name))
+    if count is None:
+        r.set(count_key(name), 0)
+        count = 0
+
+    ctx = {
+        'name': name,
+        'width': 80,
+        'height': 55,
+        'pixels': pixel_dict,
+        'users': r.get(count_key(name)),
+        'url': quote('http://www.pixelator.co/%s' % name)
+    }
+    return render_template('index.html', **ctx)
+
+
+@sockets.route('/<name>/submit')
+@keep_count
+def inbox(ws, name):
+    while not ws.closed:
+        # Sleep to prevent *constant* context-switches.
+        gevent.sleep(0.1)
+        message = ws.receive()
+
+        if message:
+            r.publish(name, message)
+            pixels = json.loads(message)['pixels']
+            r.hmset(name, {'%s,%s' % (d['x'], d['y']): d['color']
+                               for d in pixels})
+    return ''
+
+
+@sockets.route('/<name>/receive')
+def outbox(ws, name):
+    get_or_create_canvas(name).register(ws)
+
+    while not ws.closed:
+        # Context switch while `ChatBackend.start` is running in the background.
+        gevent.sleep()
+    return ''
