@@ -67,6 +67,8 @@
     border-top: none; }
   .drawing .muted {
     color: #cccccc; }
+  .drawing .download {
+    margin-left: 40px; }
   .drawing .help {
     float: right; }
     .drawing .help a {

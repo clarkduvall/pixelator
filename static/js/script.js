@@ -26,11 +26,17 @@ $(function() {
 
   $canvas.pixelator(wsSend, wsReceive, 1000, color);
 
+  $('.download').downloadable('.canvas', 'pixelator.png');
+
   $('.colorpicker').simplecolorpicker({
     selectColor: color,
     picker: true,
     theme: 'regularfont'
   }).on('change', function() {
     $canvas.setColor($(this).val());
+  });
+
+  $('.choose').click(function() {
+    $('.colorpicker').data('simplecolorpicker').showPicker();
   });
 });

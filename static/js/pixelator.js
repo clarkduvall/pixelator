@@ -11,6 +11,8 @@ $.fn.pixelator = function(sendSocket, receiveSocket, sendInterval) {
 
   ctx.width = canvas.width = WIDTH * pixelSize;
   ctx.height = canvas.height = HEIGHT * pixelSize;
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   this.setColor = function(newColor) {
     color = newColor;
@@ -50,9 +52,19 @@ $.fn.pixelator = function(sendSocket, receiveSocket, sendInterval) {
     defer(data.pixels, sendInterval / data.pixels.length);
   };
 
+  function drawFromEvent(e) {
+    var x = mapX(e.pageX),
+        y = mapY(e.pageY);
+    if ($.isNumeric(x) && $.isNumeric(y)) {
+      colorPixel(x, y, color);
+      toSend.push({x: x, y: y, color: color});
+    }
+  }
+
   // Only draw when the mouse is down.
-  $('body').bind('mousedown touchstart', function() {
+  $('body').bind('mousedown touchstart', function(e) {
     drawing = true;
+    drawFromEvent(e);
   }).bind('mouseup touchend touchcancel', function() {
     drawing = false;
   });
@@ -60,14 +72,10 @@ $.fn.pixelator = function(sendSocket, receiveSocket, sendInterval) {
   $canvas.bind('mousemove touchmove', function(e) {
     if (!drawing) return;
     e && e.preventDefault();
-
     if (e.originalEvent.targetTouches)
       e = e.originalEvent.targetTouches[0];
 
-    var x = mapX(e.pageX),
-        y = mapY(e.pageY);
-    colorPixel(x, y, color);
-    toSend.push({x: x, y: y, color: color});
+    drawFromEvent(e);
   });
 
   // Send our data at regular intervals.
