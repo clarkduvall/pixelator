@@ -4,7 +4,7 @@ import gevent
 class CanvasBackend(object):
 
     def __init__(self, channel, redis):
-        self.clients = list()
+        self.clients = []
         self.pubsub = redis.pubsub()
         self.pubsub.subscribe(channel)
         self.start()
@@ -22,7 +22,8 @@ class CanvasBackend(object):
         try:
             client.send(data)
         except Exception:
-            self.clients.remove(client)
+            if client in self.clients:
+                self.clients.remove(client)
 
     def run(self):
         for data in self._iter_data():

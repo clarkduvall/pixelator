@@ -31,6 +31,7 @@ def count_key(name):
     return name + '/count'
 
 
+# Use this to keep count of users on a socket endpoint.
 def keep_count(f):
     @wraps(f)
     def inner(ws, name, *args, **kwargs):
@@ -55,11 +56,6 @@ def canvas(name='main'):
         except (ValueError, TypeError):
             pass
 
-    count = r.get(count_key(name))
-    if count is None:
-        r.set(count_key(name), 0)
-        count = 0
-
     url = 'http://www.pixelator.co'
     if name != 'main':
         url = '%s/%s' % (url, name)
@@ -69,14 +65,12 @@ def canvas(name='main'):
         'width': 80,
         'height': 55,
         'pixels': json.dumps(pixel_dict),
-        'users': count,
         'url': quote(url)
     }
     return render_template('index.html', **ctx)
 
 
 @sockets.route('/<name>/submit')
-@keep_count
 def inbox(ws, name):
     while not ws.closed:
         # Sleep to prevent *constant* context-switches.
