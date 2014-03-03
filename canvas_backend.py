@@ -23,6 +23,7 @@ class CanvasBackend(object):
             client.send(data)
         except Exception:
             if client in self.clients:
+                client.close()
                 self.clients.remove(client)
 
     def run(self):
