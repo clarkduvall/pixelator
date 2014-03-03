@@ -10,15 +10,22 @@ import gevent
 import redis
 
 from canvas_backend import CanvasBackend
+from filters import escapejs
 from flask_sockets2 import Sockets
 
 
 REDIS_URL = os.environ['REDISCLOUD_URL']
 
+# Set up Flask app.
 app = Flask(__name__, static_url_path='/s', static_folder='static')
+app.jinja_env.filters['jsonify'] = lambda v: escapejs(json.dumps(v))
 app.debug = 'DEBUG' in os.environ
 sockets = Sockets(app)
+
+# Set up Redis.
 r = redis.from_url(REDIS_URL)
+
+# Canvases for each URL.
 canvases = {}
 
 def get_or_create_canvas(name):
@@ -64,7 +71,7 @@ def canvas(name='main'):
         'name': name,
         'width': 80,
         'height': 55,
-        'pixels': json.dumps(pixel_dict),
+        'pixels': pixel_dict,
         'url': quote(url)
     }
     return render_template('index.html', **ctx)

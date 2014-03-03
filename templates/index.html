@@ -85,7 +85,7 @@
       NAME = '{{ name }}';
       WIDTH = {{ width }};
       HEIGHT = {{ height }};
-      PIXELS = '{{ pixels|safe }}';
+      PIXELS = '{{ pixels|jsonify }}';
     </script>
     <script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="/s/js/reconnecting-websocket.min.js"></script>
